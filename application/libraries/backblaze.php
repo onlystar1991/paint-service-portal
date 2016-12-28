@@ -123,7 +123,7 @@ class Backblaze {
 
 			$upload_url = $return['upload_url'];
 			$upload_auth_token = $return['authorization_token'];
-			$content_type = "video/all";
+			$content_type = "video/mp4";
 			$sha1_of_file_data = sha1_file($my_file);
 
 			$session = curl_init($upload_url);
