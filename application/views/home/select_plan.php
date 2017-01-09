@@ -74,6 +74,8 @@
             </div>
         </div>
     </div>
+    <br><br><br>
+    <a href="<?= base_url()?>/home/dashboard" class="btn btn-primary">Continue with free trial!</a>
 </div>
 
 

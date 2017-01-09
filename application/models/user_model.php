@@ -41,22 +41,25 @@ class User_model extends CI_Model {
 		return $this->session->userdata('email') ? true : false;
 	}
 
-	public function register($email, $password) {
+	public function register($first_name, $last_name, $email, $password) {
 		$query = $this->db->select('email, id, pass')
 				->where('email', $email)
 				->limit(1)
 				->get('tbl_users');
-
 		if ($query->num_rows() === 1) {
 			return false;
 		} else {
-			$create_bucket = $this->backblaze->create_bucket($this->generate_bucket_name($email), 'allPublic');
+			// $create_bucket = $this->backblaze->create_bucket($this->generate_bucket_name($email), 'allPublic');
+			$create_bucket = 1;
 			if ($create_bucket) {
-				$data = array(
+				$data = array (
+					'first_name' => $first_name,
+					'last_name' => $last_name,
 					'email' => $email,
 					'pass' => md5($password),
 					'default_categories' => "{'categoryA', 'categoryB','categoryC','categoryD','categoryE','categoryF'}",
-					'bucket_id' => $create_bucket['bucket_id']
+					// 'bucket_id' => $create_bucket['bucket_id'],
+					'register' => date("Y-m-d H:i:s")
 				);
 				return $this->db->insert('tbl_users', $data);
 			} else {

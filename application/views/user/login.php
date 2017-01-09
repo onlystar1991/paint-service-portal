@@ -4,9 +4,17 @@
 			<?php
 				if (isset($message)) {
 					?>
+						<div class="alert alert-success alert-dismissible">
+							<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+							<?= $message ?>
+						</div>
+					<?php
+				}
+				if (isset($error)) {
+					?>
 					<div class="alert alert-danger alert-dismissible">
 						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-						<?= $message ?>
+						<?= $error ?>
 					</div>
 					<?php
 				}
@@ -25,7 +33,7 @@
 					</br>
 					</br>
 					<div class="wrapper">
-							<input type="submit" class="btn btn-default btn-md" value="Login">
+						<input type="submit" class="btn btn-default btn-md" value="Login">
 						<br>
 					</div>
 					<br>

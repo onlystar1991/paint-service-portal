@@ -54,3 +54,4 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['video_detail/(:any)'] = 'home/video_detail/$1';
 $route['reset_password/(:any)'] = 'user/reset_password/$1';
+$route['/'] = 'home/welcome';

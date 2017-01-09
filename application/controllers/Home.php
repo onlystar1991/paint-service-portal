@@ -17,6 +17,7 @@ class Home extends CI_Controller {
 		// Controller Specific CSS and Scripts
 		
 		$this->data = array();
+		$this->script = array();
 
 	}
 
@@ -29,9 +30,27 @@ class Home extends CI_Controller {
 				redirect('home/dashboard');
 			}
 		} else {
-			redirect('user/login');
+			redirect('home/welcome');
 		}
 	}
+
+	public function welcome() {
+		$this->css = array('home_welcome');
+		$this->template->load('main', 'home/welcome', $this->css, $this->script, $this->data);
+	}
+	public function terms() {
+		$this->css = array('home_welcome');
+		$this->template->load('main', 'home/_terms', $this->css, $this->script, $this->data);
+	}
+	public function policy() {
+		$this->css = array('home_welcome');
+		$this->template->load('main', 'home/_policy', $this->css, $this->script, $this->data);
+	}
+	public function agreement() {
+		$this->css = array('home_welcome');
+		$this->template->load('main', 'home/_agreement', $this->css, $this->script, $this->data);
+	}
+
 
 	public function dashboard() {
 		if ($this->user_model->is_logged_in()) {

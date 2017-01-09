@@ -23,7 +23,11 @@ class User extends CI_Controller {
 	}
 
 	public function index() {
-		
+		if ($this->user_model->is_logged_in()) {
+			redirect('/');
+		} else {
+			redirect('user/login');
+		}
 	}
 
 	public function login()
@@ -70,9 +74,11 @@ class User extends CI_Controller {
 
 	public function register()
 	{
+		$this->form_validation->set_rules('first_name', 'First Name', 'required');
+		$this->form_validation->set_rules('last_name', 'Last Name', 'required');
+		$this->form_validation->set_rules('agree', 'Agree Terms', 'required', array('required' => 'You should agree to Terms of Service'));
 		$this->form_validation->set_rules('email', 'Email', 'trim|required|is_unique[tbl_users.email]', 
 			array(
-				'required' => 'Email is required.',
 				'is_unique' => 'This %s already exists.'
 			)
 		);
@@ -81,9 +87,23 @@ class User extends CI_Controller {
 		$this->form_validation->set_rules('confirm_password', 'Confirm Password', 'trim|required|matches[password]');
 
 		if ($this->form_validation->run() == true) {
-			if ($this->user_model->register($this->input->post('email'), $this->input->post('password'))) {
-				$this->session->set_flashdata('message', "Successfully Signed Up.");
+			if ($this->user_model->register($this->input->post('first_name'), $this->input->post('first_name'), $this->input->post('email'), $this->input->post('password'))) {
+
+
+				$message = $this->load->view('mails/registeration', array(), true);
+
+				$headers = "MIME-Version: 1.0" . "\r\n";
+				$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+				// More headers
+				$headers .= 'From: <webmaster@example.com>' . "\r\n";
+				$subject = "Videre - Thanks for regsiteration";
+
+				$to = $this->input->post('email');
+				$flag = mail($to,$subject,$message,$headers);
+				
 				redirect('user/login', 'refresh');
+
 			} else {
 				$this->session->set_flashdata('message', "Email already taken.");
 				redirect('user/register', 'refresh');
@@ -91,6 +111,24 @@ class User extends CI_Controller {
 		} else {
 
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+
+			$this->data['first_name'] = array(
+				'class' => 'form-control',
+				'placeholder' => 'First Name',
+				'name' => 'first_name',
+				'id' => 'first_name',
+				'type' => 'text',
+				'value' => $this->form_validation->set_value('first_name'),
+			);
+
+			$this->data['last_name'] = array(
+				'class' => 'form-control',
+				'placeholder' => 'Last Name',
+				'name' => 'last_name',
+				'id' => 'last_name',
+				'type' => 'text',
+				'value' => $this->form_validation->set_value('last_name'),
+			);
 
 			$this->data['email'] = array(
 				'class' => 'form-control',
@@ -140,9 +178,6 @@ class User extends CI_Controller {
 		if (!$this->user_model->is_logged_in()) {
 			redirect('user/login', 'refresh');
 		} else {
-
-			///////////////////
-
 			$this->css = array('setting');
 			$this->script = array('setting');
 			$this->data = array();
@@ -406,5 +441,15 @@ class User extends CI_Controller {
 			$this->session->set_flashdata('error', validation_errors());
 			redirect('user/reset_password/'.$this->input->post('token'), 'refresh');
 		}
+	}
+
+	public function logout() {
+		$this->session->sess_destroy();
+		redirect('/', 'refresh');
+	}
+
+	public function stripe_callback() {
+		var_dump($this->input->post());
+		echo "<script>alert('callback')</script>";
 	}
 }

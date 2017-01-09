@@ -16,6 +16,14 @@
 					<h4>Please Sign Up</h4>
 					<div class="input-group" style="margin-bottom: 25px;">
 						<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+						<?php echo form_input($first_name);?>
+					</div>
+					<div class="input-group" style="margin-bottom: 25px;">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+						<?php echo form_input($last_name);?>
+					</div>
+					<div class="input-group" style="margin-bottom: 25px;">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
 						<?php echo form_input($email);?>
 					</div>
 					<div class="input-group" style="margin-bottom: 25px;">
@@ -26,10 +34,17 @@
 						<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
 						<?php echo form_input($confirm_password);?>
 					</div>
+					<br>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="agree"> Yes, I understand and agree to the 
+						</label>
+						<a href="<?= base_url() ?>home/terms">Terms of Service </a>, including the <a href="<?= base_url() ?>home/agreement">User Agreement </a>and<a href="<?= base_url() ?>home/policy"> Privacy Policy.</a> for Videre
+					</div>
 					</br>
 					</br>
 					<div class="wrapper">
-							<input type="submit" class="btn btn-default btn-md" value="Login">
+						<input type="submit" class="btn btn-default btn-md" value="Register">
 						<br>
 					</div>
 					<br>
