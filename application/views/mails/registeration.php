@@ -1,5 +1,6 @@
 <html>
 	<head>Registering to Videre</head>
+	<br>
 	<body>
 		Thanks for registering for Videre. <br>
 

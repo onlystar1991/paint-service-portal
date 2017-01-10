@@ -57,7 +57,7 @@ class User_model extends CI_Model {
 					'email' => $email,
 					'pass' => md5($password),
 					'default_categories' => "{'categoryA', 'categoryB','categoryC','categoryD','categoryE','categoryF'}",
-					// 'bucket_id' => $create_bucket['bucket_id'],
+					'bucket_id' => $create_bucket['bucket_id'],
 					'register' => date("Y-m-d H:i:s")
 				);
 				return $this->db->insert('tbl_users', $data);

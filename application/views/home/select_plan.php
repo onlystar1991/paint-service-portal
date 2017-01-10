@@ -75,7 +75,7 @@
         </div>
     </div>
     
-    <a href="<?= base_url()?>/home/dashboard" class="btn btn-primary <?= $expired ? 'disabled' : '' ?>">Continue with free trial!</a>
+    <a href="<?= base_url()?>home/dashboard" class="btn btn-primary <?= $expired ? 'disabled' : '' ?>">Continue with free trial!</a>
 </div>
 
 
