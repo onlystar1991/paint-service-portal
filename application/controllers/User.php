@@ -163,7 +163,7 @@ class User extends CI_Controller {
 		if (!$this->user_model->is_logged_in()) {
 			redirect('user/login', 'refresh');
 		} else {
-			
+			$this->data['expired'] = $this->user_model->is_expired($this->session->userdata('email'));
 			$this->css = array('select_plan');
 			$this->script = array('select_plan');
 			$this->template->load('main', 'home/select_plan', $this->css, $this->script, $this->data);
@@ -280,9 +280,10 @@ class User extends CI_Controller {
 
 	public function change_user_name() {
 		$email = $this->input->post('email');
-		$name = $this->input->post('username');
+		$first_name = $this->input->post('first_name');
+		$last_name = $this->input->post('last_name');
 		$result = array();
-		if ($this->user_model->update_user_name($email, $name)) {
+		if ($this->user_model->update_user_name($email, $first_name, $last_name)) {
 			$result['status'] = 'ok';
 		} else {
 			$result['status'] = 'fail';

@@ -1,12 +1,14 @@
 $(function() {
 	$("#change_user_name").click(function() {
 		$("#save_user_name").show();
-		$("#input-user-name").removeAttr('disabled');
+		$("#input-user-first-name").removeAttr('disabled');
+		$("#input-user-last-name").removeAttr('disabled');
 	})
 	$("#save_user_name").click(function() {
 		var data = {
 			email: email,
-			username: $("#input-user-name").val()
+			first_name: $("#input-user-first-name").val(),
+			last_name: $("#input-user-last-name").val()
 		}
 		$.ajax({
 			url: base_url + 'user/change_user_name',

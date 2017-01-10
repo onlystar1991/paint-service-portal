@@ -46,7 +46,9 @@
 					<div class="pull-left">
 						<span>Username</span><br><br>
 						<div style="display: flex">
-							<input type="text" id="input-user-name" class="form-control" value="<?= $user['name']?>" disabled>
+
+							<input type="text" id="input-user-first-name" class="form-control user-name-field" value="<?= $user['first_name']?>" disabled placeholder="First Name" >&nbsp;
+							<input type="text" id="input-user-last-name" class="form-control user-name-field" value="<?= $user['last_name']?>" disabled placeholder="Last Name">&nbsp;
 							<button id="save_user_name" class="btn btn-primary" style="display: none">Ok</button>
 						</div>
 					</div>
@@ -85,6 +87,21 @@
 			</div>
 			<hr>
 			<div class="row">
+				<?php
+					if (!$user['customer_id']) {
+						?>
+						<div class="alert alert-danger alert-dismissible">
+							You are using free trial subscription. Free subscription will be expired in 
+							<?php
+								$six_weeks = 6 * 7 * 24 * 3600;
+								$passed = strtotime('now') - strtotime($user['register']);
+								$remain_days = (int)(($six_weeks - $passed) / 3600 / 24);
+								echo $remain_days.'days';
+							?>
+						</div>
+						<?php
+					}
+				?>
 				<div class="col-md-12">
 					Subscription
 					<?php
@@ -114,28 +131,60 @@
 							$yearly_pay_amount = 199.99;
 							$monthly_pay_amount = 19.95;
 						} else {
-							$yearly_pay_amount = 0;
-							$monthly_pay_amount = 0;
+							$yearly_pay_amount = "Free";
+							$monthly_pay_amount = "Free";
 						}
 					?>
 					<table class="subscription-table" border="1">
 						<tbody>
 							<tr>
 								<td rowspan="2"><?= $size ?>GB</td>
-								<td>
-									<label>
-										<input type="radio" name="change_member_ship" <?= $monthly ? 'checked' : '' ?> disabled="">
-										&nbsp;&nbsp;$<?= $monthly_pay_amount ?>/ monthly
-									</label>
-								</td>
+
+								<?php
+									if ($yearly_pay_amount == "Free") {
+										?>
+										<td>
+											<label>
+												<input type="radio" name="change_member_ship" disabled="">
+												&nbsp;&nbsp;Free trial
+											</label>
+										</td>
+										<?php
+									} else {
+										?>
+										<td>
+											<label>
+												<input type="radio" name="change_member_ship" <?= $monthly ? 'checked' : '' ?> disabled="">
+												&nbsp;&nbsp;$<?= $monthly_pay_amount ?>/ monthly
+											</label>
+										</td>
+										<?php
+									}
+								?>
+
 							</tr>
 							<tr>
-								<td>
-									<label>
-										<input type="radio" name="change_member_ship" <?= $monthly ? '' : 'checked' ?> disabled="">
-										&nbsp;&nbsp;$<?= $yearly_pay_amount ?>/ yearly
-									</label>
-								</td>
+								<?php
+									if ($yearly_pay_amount == "Free") {
+										?>
+										<td>
+											<label>
+												<input type="radio" name="change_member_ship" disabled="">
+												&nbsp;&nbsp;Free trial
+											</label>
+										</td>
+										<?php
+									} else {
+										?>
+										<td>
+											<label>
+												<input type="radio" name="change_member_ship" <?= $monthly ? '' : 'checked' ?> disabled="">
+												&nbsp;&nbsp;$<?= $yearly_pay_amount ?>/ yearly
+											</label>
+										</td>
+										<?php
+									}
+								?>
 							</tr>
 						</tbody>
 					</table>
@@ -180,7 +229,6 @@
 		</div>
 		<div class="tab-pane <?= $active_tab == 3 ? 'active' : '' ?>" id="third">
 			<div class="col-md-12">
-				Videre <br>
 				<br>
 				<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 					<div class="panel panel-default">
@@ -223,20 +271,20 @@
 	</div>
 
 	<div id="preview-photo-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4>Do you want to use this photo as your avatar?</h4>
-                </div>
-                <div class="modal-body">
-                    <img id="new-photo-img" style="width: 100px; height: 100px;">
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-primary upload-this-file">Yes, I will use.</a>
-                    <a href="#" class="btn btn-default cancel-upload">No, I will try with other one.</a>
-                </div>
-            </div>
-        </div>
-    </div>
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4>Do you want to use this photo as your avatar?</h4>
+				</div>
+				<div class="modal-body">
+					<img id="new-photo-img" style="width: 100px; height: 100px;">
+				</div>
+				<div class="modal-footer">
+					<a href="#" class="btn btn-primary upload-this-file">Yes, I will use.</a>
+					<a href="#" class="btn btn-default cancel-upload">No, I will try with other one.</a>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </div>

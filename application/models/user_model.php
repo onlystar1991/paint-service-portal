@@ -49,8 +49,7 @@ class User_model extends CI_Model {
 		if ($query->num_rows() === 1) {
 			return false;
 		} else {
-			// $create_bucket = $this->backblaze->create_bucket($this->generate_bucket_name($email), 'allPublic');
-			$create_bucket = 1;
+			$create_bucket = $this->backblaze->create_bucket($this->generate_bucket_name($email), 'allPublic');
 			if ($create_bucket) {
 				$data = array (
 					'first_name' => $first_name,
@@ -167,9 +166,9 @@ class User_model extends CI_Model {
 		return $this->db->update('tbl_users', array('customer_id' => $customer_id, 'user_type' => $user_type, 'plan_id' => $plan_id));
 	}
 
-	public function update_user_name($email, $name) {
+	public function update_user_name($email, $first_name, $last_name) {
 		$this->db->where('email', $email);
-		return $this->db->update('tbl_users', array('name' => $name));
+		return $this->db->update('tbl_users', array('first_name' => $first_name, 'last_name' => $last_name));
 	}
 	
 	public function update_user_email($email, $new_email) {
@@ -233,5 +232,20 @@ class User_model extends CI_Model {
 	public function set_new_password($new_pass, $email) {
 		$this->db->where('email', $email);
 		return $this->db->update('tbl_users', array('pass' => md5($new_password)));
+	}
+
+	public function is_expired($email) {
+		$query = $this->db->where(array('email' => $email))
+						->limit(1)
+						->get('tbl_users');
+		if ($query->num_rows() === 1) {
+			$user = $query->row();
+
+			$now = strtotime("now");
+			$diff =  $now - strtotime($user->register);
+			return $diff > 6 * 7 * 24 * 3600 ? TRUE : FALSE;
+		} else {
+			return false;
+		}
 	}
 }

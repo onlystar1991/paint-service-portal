@@ -126,3 +126,10 @@ body
     border: none;
     color: black;
 }
+a.disabled {
+    pointer-events: none;
+    opacity: 0.65;
+    background: #265a88;
+    box-shadow: none;
+    cursor: not-allowed;
+}
