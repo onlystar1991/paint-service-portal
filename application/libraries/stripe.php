@@ -389,4 +389,14 @@ class stripe
     {
         return \Stripe\Plan::retrieve($id);
     }
+    public function stripe_webhook($body) {
+
+        $event_json = json_decode($body);
+        $event = \Stripe\Event::retrieve($event_json->id);
+        $result = array();
+        $result['event_id'] = $event_json->id;
+        $result['customer_id'] = $event_json->data->object->source->customer;
+        $result['event_type']= $event->type;
+        return $result;
+    }
 }

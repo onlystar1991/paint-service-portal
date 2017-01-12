@@ -15,7 +15,7 @@ class User extends CI_Controller {
 		
 		// Controller Specific CSS and Scripts
 		$this->css = array('login');
-		$this->script = array('login');
+		$this->script = array('0login');
 		$this->data = array();
 
 		$this->load->library('stripe');
@@ -96,7 +96,7 @@ class User extends CI_Controller {
 				$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
 				// More headers
-				$headers .= 'From: <webmaster@example.com>' . "\r\n";
+				$headers .= 'From: <administrator@videre.com>' . "\r\n";
 				$subject = "Videre - Thanks for regsiteration";
 
 				$to = $this->input->post('email');
@@ -385,13 +385,12 @@ class User extends CI_Controller {
 				$this->email->to($this->input->post('email'));
 
 				$this->email->subject('Password Reset');
-				$this->email->message('Testing the email class. <a href="http://www.google.co.uk">test</a>');   
+				$this->email->message('Testing the email class. <a href="http://www.google.co.uk">test</a>');
 
 				$flag = $this->email->send();
 				if ($flag) {
 					die("success");
 				} else {
-					$this->email->print_debugger();
 					die('fail');
 				}
 			} else {
@@ -450,7 +449,62 @@ class User extends CI_Controller {
 	}
 
 	public function stripe_callback() {
-		var_dump($this->input->post());
-		echo "<script>alert('callback')</script>";
+		$body = @file_get_contents("php://input");
+
+		$event = $this->stripe->stripe_webhook($body);
+
+		switch ($event['event_type']) {
+			case 'invoice.payment_failed':
+				$result = $this->user_model->make_unpaid_account_for_customer_id($event['customer_id']);
+				if ($result['email']) {
+					$message = $this->load->view('mails/payment_failed', array(), true);
+
+					$headers = "MIME-Version: 1.0" . "\r\n";
+					$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+					// More headers
+					$headers .= 'From: <administrator@videre.com>' . "\r\n";
+					$subject = "Videre - Failed Payment Notification";
+
+					$to = $result['email'];
+					$flag = mail($to,$subject,$message,$headers);
+				}
+				break;
+			case 'invoice.payment_succeeded':
+				$result = $this->user_model->make_paid_account_for_customer_id($event['customer_id']);
+				if ($result['email']) {
+					$message = $this->load->view('mails/payment_failed', array(), true);
+
+					$headers = "MIME-Version: 1.0" . "\r\n";
+					$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+					// More headers
+					$headers .= 'From: <administrator@videre.com>' . "\r\n";
+					$subject = "Videre - Successed Payment Notification";
+
+					$to = $result['email'];
+					$flag = mail($to,$subject,$message,$headers);
+				}
+				break;
+			case 'customer.subscription.deleted':
+				$result = $this->user_model->delete_user_with_customer_id($event['customer_id']);
+				if ($result['email']) {
+					$message = $this->load->view('mails/account_deleted', array(), true);
+
+					$headers = "MIME-Version: 1.0" . "\r\n";
+					$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+					// More headers
+					$headers .= 'From: <administrator@videre.com>' . "\r\n";
+					$subject = "Videre - Deleted Account";
+
+					$to = $result['email'];
+					$flag = mail($to,$subject,$message,$headers);
+				}
+				break;
+			default:
+				
+				break;
+		}
 	}
 }
