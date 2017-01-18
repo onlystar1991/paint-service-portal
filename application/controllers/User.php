@@ -372,22 +372,19 @@ class User extends CI_Controller {
 			if ($this->user_model->set_password_reset_token($token, $this->input->post('email'))) {
 				$reset_url = base_url() . "reset_password/" . $token;
 				
-				$config['protocol'] = 'smtp';
-				$config['smtp_host'] = 'localhost';
-				$config['mailtype'] = 'html';
-				$config['crlf']        = "\r\n";        // CHANGED FROM DEFAULTS
-				$config['newline']     = "\r\n"; 
-				$config['validation']	= FALSE;
+				$message = $this->load->view('mails/reset_password', array('url' => $reset_url), true);
 
-				$this->email->initialize($config);
+				$headers = "MIME-Version: 1.0" . "\r\n";
+				$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
-				$this->email->from('noreply@hiddendomain.com');
-				$this->email->to($this->input->post('email'));
+				// More headers
+				$headers .= 'From: <administrator@videre.com>' . "\r\n";
+				$subject = "Videre - Reset Password";
 
-				$this->email->subject('Password Reset');
-				$this->email->message('Testing the email class. <a href="http://www.google.co.uk">test</a>');
+				$to = $this->input->post('email');
+				$flag = mail($to,$subject,$message,$headers);
 
-				$flag = $this->email->send();
+
 				if ($flag) {
 					die("success");
 				} else {

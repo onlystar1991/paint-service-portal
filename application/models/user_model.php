@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-define(UNPAID, 1);
-define(PAID, 2);
+define('UNPAID', 1);
+define('PAID', 2);
 
 class User_model extends CI_Model {
 
@@ -254,7 +254,7 @@ class User_model extends CI_Model {
 	public function make_unpaid_account_for_customer_id($customer_id) {
 		$this->db->where('customer_id', $customer_id);
 		$flag = $this->db->update('tbl_users', array('paid_status' => UNPAID));
-		$query = $this->db->where('customer_id' => $customer_id)
+		$query = $this->db->where('customer_id', $customer_id)
 						->limit(1)
 						->get('tbl_users');
 
@@ -270,7 +270,7 @@ class User_model extends CI_Model {
 	public function make_paid_account_for_customer_id($customer_id) {
 		$this->db->where('customer_id', $customer_id);
 		$flag = $this->db->update('tbl_users', array('paid_status' => PAID));
-		$query = $this->db->where('customer_id' => $customer_id)
+		$query = $this->db->where('customer_id', $customer_id)
 						->limit(1)
 						->get('tbl_users');
 
@@ -283,7 +283,7 @@ class User_model extends CI_Model {
 		return $result;
 	}
 	public function delete_user_with_customer_id($customer_id) {
-		$query = $this->db->where('customer_id' => $customer_id)
+		$query = $this->db->where('customer_id', $customer_id)
 						->limit(1)
 						->get('tbl_users');
 
@@ -296,7 +296,7 @@ class User_model extends CI_Model {
 		$this->db->where('customer_id', $customer_id);
 		$flag = $this->db->delete('tbl_users');
 		$result['status'] = $flag;
-		
+
 		return $result;
 	}
 }
