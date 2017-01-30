@@ -64,9 +64,9 @@
                 </div>
                 <div class="panel-body">
                     <div class="the-price">
-                        <h3> $9.95/month</h3>
+                        <h3> $19.95/month</h3>
                         <strong>Or</strong>
-                        <h3> $99.99/year</h3>
+                        <h3> $199.99/year</h3>
                     </div>
                 </div>
                 <div class="panel-footer">
