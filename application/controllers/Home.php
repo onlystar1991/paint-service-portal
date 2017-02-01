@@ -138,8 +138,7 @@ class Home extends CI_Controller {
 					$headers .= 'From: <administrator@videre.com>' . "\r\n";
 					$subject = "Videre - Share videos";
 
-					$to = $this->input->post('email');
-					$flag = mail($to,$subject,$message,$headers);
+					$flag = mail(trim($man),$subject,$message,$headers);
 
 				} else {
 					$flag = false;
@@ -156,33 +155,5 @@ class Home extends CI_Controller {
 		echo json_encode($result);
 	}
 
-	public function save_category() {
-		$email = $this->session->userdata('email');
-		$video = $this->input->post('video');
-		$category_name = $this->input->post('category_name');
-		$result = array();
-		if ($this->video_model->save_category($email, $video, $category_name)) {
-			$result['status'] = 'ok';
-			$result['name'] = $category_name;
-		} else {
-			$result['status'] = 'fail';
-		}
-		echo json_encode($result);
-	}
-
-	public function save_clip() {
-		$email = $this->input->post('email');
-		$category = $this->input->post('category');
-		$video = $this->input->post('video');
-
-		$info_array = array('start' => $this->input->post('start'), 'end' => $this->input->post('end'));
-		$info = json_encode($info_array);
-		$result = array();
-		if ($this->video_model->save_clip($email, $video, $category, $info)) {
-			$result['status'] = 'ok';
-		} else {
-			$result['status'] = 'fail';
-		}
-		echo json_encode($result);
-	}
+	
 }
