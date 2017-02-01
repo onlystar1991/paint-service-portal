@@ -24,6 +24,7 @@ class User_model extends CI_Model {
 			$user = $query->row();
 			if (md5($password) == $user->pass) {
 				$session_data = array(
+					'user_name'			=> $user->first_name. " ".$user->last_name,
 					'email'				=> $user->email,
 					'user_id'			=> $user->id,
 					'user_type'			=> $user->user_type,

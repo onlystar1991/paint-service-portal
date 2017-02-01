@@ -63,6 +63,8 @@
 		<script type="text/javascript" src="<?= base_url() ?>assets/docs-assets/js/affix.js" charset="UTF-8"></script>
 		<script type="text/javascript" src="<?= base_url() ?>assets/docs-assets/js/typeahead.bundle.min.js" charset="UTF-8"></script>
 		<script type="text/javascript" src="<?= base_url() ?>assets/docs-assets/js/docs.min.js" charset="UTF-8"></script>
+
+		<script src="https://cdn.jsdelivr.net/clipboard.js/1.5.16/clipboard.min.js"></script>
 		<?= $script ?>
 	</body>
 </html>

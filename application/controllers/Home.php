@@ -126,7 +126,21 @@ class Home extends CI_Controller {
 			$flag = false;
 			foreach ($sharable_arr as $man) {
 				if ($this->user_model->share_with($this->session->userdata('email'), $man, $video_timestamp)) {
-					$flag = true;
+					$fullname = $this->session->userdata('user_name');
+					$video_ = $this->video_model->get_video_by_timestamp($video_timestamp)[0];
+					$url = json_decode($video_['info'])->url;
+					$message = $this->load->view('mails/video_share', array('user' => $fullname, 'url' => $url), true);
+
+					$headers = "MIME-Version: 1.0" . "\r\n";
+					$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+					// More headers
+					$headers .= 'From: <administrator@videre.com>' . "\r\n";
+					$subject = "Videre - Share videos";
+
+					$to = $this->input->post('email');
+					$flag = mail($to,$subject,$message,$headers);
+
 				} else {
 					$flag = false;
 				}

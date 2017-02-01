@@ -74,7 +74,6 @@
 							</ul>
 						<?php endforeach; ?>
 					</ul>
-					<button id="add-new-category" class="btn btn-primary" style="width: 100%; font-size: 15px;">Add New Category</button>
         		</div>
     		</div>
 		</div>
@@ -85,8 +84,6 @@
 			</div>
 			<div class="col-md-6 col-md-offset-3" style="padding-top: 10px;">
 				<video id="play_video" style="width: 100%;" src='<?= json_decode($video['info'])->url ?>' controls preload></video>
-				<button id="clip_record_start" class="btn btn-primary">Clip start</button>
-				<button id="clip_record_end" class="btn btn-primary">Clip end</button>
 			</div>
 		</div>	
 	</div>
@@ -104,7 +101,12 @@
 							Anyone with the link <strong>can view</strong>
 						</div>
 						<div class="panel-body">
-							<input type="text" class="form-control" value="<?= json_decode($video['info'])->url ?>" disabled>
+							<div class="input-group" style="margin-bottom: 25px;">
+								<input id="copy-input" type="text" class="form-control" value="<?= json_decode($video['info'])->url ?>" readonly>
+								<span class="input-group-btn">
+									<button class="btn copybtn" data-clipboard-target="#copy-input">Copy</button>
+								</span>
+							</div>
 						</div>
 					</div>
 					<hr>
@@ -116,60 +118,10 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button id="start-share" data-timestamp="<?= $video['timestamp']?>" class="btn btn-primary" style="border-radius: 1px;">Done</button>
+					<button id="start-share" data-timestamp="<?= $video['timestamp']?>" class="btn btn-primary" style="border-radius: 1px;">Send Link</button>
 				</div>
 			</div>
 		</div>
 	</div>
-
-	<div id="add-new-category-modal" class="modal fade" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4>Add New Category For this Video</h4>
-				</div>
-				<div class="modal-body">
-					
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							Category Name:
-						</div>
-						<div class="panel-body">
-							<input type="text" id="new-category-name" name="category-name" class="form-control" autocomplete="false">
-						</div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button id="save-new-category" data-video="<?= $video['timestamp']?>" class="btn btn-primary" style="border-radius: 1px;">Save</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div id="save-clip-modal" class="modal fade" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4>Add new clip for this video to <span id="category_name_for_clip"></span></h4>
-				</div>
-				<div class="modal-body">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							Clip duration
-						</div>
-						<div class="panel-body">
-							Start: <span id="clip-start-position"></span>
-							<br>
-							End: <span id="clip-end-position"></span>
-						</div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button id="save-new-clip" data-video="<?= $video['timestamp']?>" class="btn btn-primary" style="border-radius: 1px;">Save</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
 
 </div>

@@ -59,32 +59,5 @@
             <?php endforeach; ?>
         </table>
     </div>
-    <div class="row video-upload-form">
-        <?php echo form_open_multipart('home/do_upload');?>
-            <input type="file" id="video_file_upload" name="video" accept="video/*" class="hide" />
-        </form>
-        <br>
-        <button class="add-new-video btn btn-primary"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;&nbsp;Upload New Video</button>
-    </div>
-
-
-    <div id="preview-video-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4>Are you sure to upload this video?</h4>
-                </div>
-                <div class="modal-body">
-                    <video id="preview-video" preload controls loop autoplay></video>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-primary upload-this-file">Upload this file</a>
-                    <a href="#" class="btn btn-default cancel-upload">Cancel upload</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 
 </div>
