@@ -68,16 +68,17 @@ class Home extends CI_Controller {
 		}
 	}
 
-	public function video_detail($timestamp) {
-		if ($this->user_model->is_logged_in()) {
-			
+	public function video_detail($timestamp) {			
 			$video = $this->video_model->get_video_by_timestamp($timestamp)[0];
-			$categories = $this->user_model->get_default_categories($this->session->userdata('email'))[0];
-			$custom_categories = $this->user_model->get_categories_by_video_and_email($timestamp, $this->session->userdata('email'));
-			$clips = $this->user_model->get_clips_by_video_and_email($timestamp, $this->session->userdata('email'));
+			$categories = $this->user_model->get_default_categories()[0];
+			$custom_categories = $this->user_model->get_categories_by_video_and_email($timestamp);
+			$clips = $this->user_model->get_clips_by_video_and_email($timestamp);
 
-			$users = $this->user_model->get_sharable_users();
-			// $this->backblaze->download_file_by_id(json_decode($video['info'])->file_id);
+			if ($this->user_model->is_logged_in()) {
+				$users = $this->user_model->get_sharable_users();
+			} else {
+				$users = array();
+			}
 			$this->css = array('home_video_detail');
 			$this->script = array('home_video_detail');
 
@@ -88,12 +89,9 @@ class Home extends CI_Controller {
 			$this->data['error'] = $this->session->flashdata('error');
 			$this->data['message'] = $this->session->flashdata('message');
 			$this->data['users'] = $users;
+			$this->data['loggedin'] = $this->user_model->is_logged_in();
 
 			$this->template->load('application', 'home/video_detail', $this->css, $this->script, $this->data);
-
-		} else {
-			redirect('user/login');
-		}
 	}
 
 	public function do_upload() {

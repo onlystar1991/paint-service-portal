@@ -80,10 +80,14 @@
 		<div class="col-md-9 col-xs-8" style="border-left: 1px solid #e0e0e0; ">
 			<div class="row video-title">
 				<span><?= json_decode($video['info'])->file_name ?></span>
-				<button id="show-share-video-modal" class="pull-right btn btn-primary">Share this video</button>
+				<?php
+					if ($loggedin) {
+						echo '<button id="show-share-video-modal" class="pull-right btn btn-primary">Share this video</button>';
+					}
+				?>
 			</div>
 			<div class="col-md-6 col-md-offset-3" style="padding-top: 10px;">
-				<video id="play_video" style="width: 100%;" src='<?= json_decode($video['info'])->url ?>' controls preload></video>
+				<video id="play_video" style="width: 100%;" src='<?= json_decode($video['info'])->url ?>' preload></video>
 			</div>
 		</div>	
 	</div>

@@ -72,9 +72,8 @@ class User_model extends CI_Model {
 		return false;
 	}
 
-	public function get_default_categories($email) {
+	public function get_default_categories() {
 		$query = $this->db->select('default_categories')
-				->where('email', $email)
 				->limit(1)
 				->get('tbl_users');
 		return $query->result_array();
@@ -86,14 +85,14 @@ class User_model extends CI_Model {
 		return $result;
 	}
 
-	public function get_categories_by_video_and_email($timestamp, $email) {
-		$query = $this->db->where(array('email' => $email, 'video' => $timestamp))
+	public function get_categories_by_video_and_email($timestamp) {
+		$query = $this->db->where(array('video' => $timestamp))
 				->get('tbl_categories');
 		return $query->result_array();
 	}
 
-	public function get_clips_by_video_and_email($timestamp, $email) {
-		$query = $this->db->get_where('tbl_clips', array('video' => $timestamp, 'email' => $email));
+	public function get_clips_by_video_and_email($timestamp) {
+		$query = $this->db->get_where('tbl_clips', array('video' => $timestamp));
 		return $query->result_array();
 	}
 

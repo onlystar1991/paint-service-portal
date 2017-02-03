@@ -83,6 +83,7 @@ $(function() {
 	setInterval(function(){
 		if (video_element.currentTime > end_video_time) {
 			video_element.currentTime = start_video_time;
+			video_element.stop()
 		}
 	},300)
 	
