@@ -127,6 +127,7 @@ class Home extends CI_Controller {
 					$fullname = $this->session->userdata('user_name');
 					$video_ = $this->video_model->get_video_by_timestamp($video_timestamp)[0];
 					$url = json_decode($video_['info'])->url;
+					$url = base_url() . 'video_detail/' . $video_timestamp;
 					$message = $this->load->view('mails/video_share', array('user' => $fullname, 'url' => $url), true);
 
 					$headers = "MIME-Version: 1.0" . "\r\n";
