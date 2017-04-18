@@ -10,15 +10,12 @@ class User extends CI_Controller {
 		$this->load->library('form_validation');
 		$this->load->model('user_model');
 		$this->load->library('template');
-		$this->load->library('backblaze');
 		$this->load->helper('string');
 		
 		// Controller Specific CSS and Scripts
 		$this->css = array('login');
-		$this->script = array('0login');
+		$this->script = array('login');
 		$this->data = array();
-
-		$this->load->library('stripe');
 		$this->load->library('email');
 	}
 

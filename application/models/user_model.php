@@ -11,8 +11,6 @@ class User_model extends CI_Model {
 		parent::__construct();
 		$this->load->database();
 		$this->load->library('session');
-		$this->load->library('backblaze');
-		$this->load->library('stripe');
 	}
 
 	public function login($email, $password) {
@@ -53,21 +51,14 @@ class User_model extends CI_Model {
 		if ($query->num_rows() === 1) {
 			return false;
 		} else {
-			$create_bucket = $this->backblaze->create_bucket($this->generate_bucket_name($email), 'allPublic');
-			if ($create_bucket) {
-				$data = array (
-					'first_name' => $first_name,
-					'last_name' => $last_name,
-					'email' => $email,
-					'pass' => md5($password),
-					'default_categories' => "{'categoryA', 'categoryB','categoryC','categoryD','categoryE','categoryF'}",
-					'bucket_id' => $create_bucket['bucket_id'],
-					'register' => date("Y-m-d H:i:s")
-				);
-				return $this->db->insert('tbl_users', $data);
-			} else {
-				return false;
-			}
+			$data = array (
+				'first_name' => $first_name,
+				'last_name' => $last_name,
+				'email' => $email,
+				'pass' => md5($password),
+				'register' => date("Y-m-d H:i:s")
+			);
+			return $this->db->insert('tbl_users', $data);
 		}
 		return false;
 	}
@@ -96,24 +87,6 @@ class User_model extends CI_Model {
 		return $query->result_array();
 	}
 
-	public function save_video($filepath, $filename) {
-		
-		$result = $this->backblaze->upload_video_file($filepath, $filename, $this->session->userdata('bucket_id'));
-		if ($result) {
-			$array_info = array(
-							'file_id' 	=> $result['file_id'], 
-							'file_name' => $result['file_name'],
-							'file_size' => $result['file_size'],
-							'url' 		=> $result['download_url']."/b2api/v1/b2_download_file_by_id?fileId=".$result['file_id']
-						);
-			$insert_data = array(
-							'email' => $this->session->userdata('email'), 
-							'timestamp' => $result['upload_file_stamp'],
-							'info' => json_encode($array_info)
-						);
-			return $this->db->insert('tbl_videos', $insert_data);
-		}
-	}
 
 	public function get_entire_size_by_email($email) {
 		$query = $this->db->where('email', $email)
@@ -153,7 +126,6 @@ class User_model extends CI_Model {
 	public function delete_account($email) {
 		$this->db->where('email', $email);
 		$user = $this->db->get('tbl_users')->result_array()[0];
-		$this->stripe->deleteCustomer($user['customer_id']);
 		$this->db->where('email', $email);
 		$this->db->delete('tbl_users');
 	}
@@ -161,10 +133,7 @@ class User_model extends CI_Model {
 	public function update_customer_id($customer_id, $user_type, $plan_id) {
 		$this->db->where('email', $this->session->userdata('email'));
 		$user = $this->db->get('tbl_users')->result_array()[0];
-		if ($user['customer_id']) {
-			$this->stripe->deleteCustomer($user['customer_id']);
-		}
-
+		
 		$this->db->where('email', $this->session->userdata('email'));
 		return $this->db->update('tbl_users', array('customer_id' => $customer_id, 'user_type' => $user_type, 'plan_id' => $plan_id));
 	}
