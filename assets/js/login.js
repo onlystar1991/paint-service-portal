@@ -1,3 +1,0 @@
-$(function() {
-	// Some jQuery functions here...
-})

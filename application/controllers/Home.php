@@ -26,13 +26,13 @@ class Home extends CI_Controller {
 			}
 		} else {
 			$this->css = array('home_welcome');
-			$this->template->load('main', 'home/welcome', $this->css, $this->script, $this->data);
+			$this->template->load('application', 'home/welcome', $this->css, $this->script, $this->data);
 		}
 	}
 
 	public function welcome() {
 		$this->css = array('home_welcome');
-		$this->template->load('main', 'home/welcome', $this->css, $this->script, $this->data);
+		$this->template->load('application', 'home/welcome', $this->css, $this->script, $this->data);
 	}
 	public function terms() {
 		$this->css = array('home_welcome');

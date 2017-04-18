@@ -1,0 +1,79 @@
+header {
+    background-image: url(../images/banner-bg.jpg);
+    background-size: cover;
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    padding-bottom: 130px;
+    .top {
+        padding: 15px 0;
+        ul {
+            margin-top: 30px;
+            li {
+                a {
+                    color: #fff;
+                    text-decoration: none;
+                    font-weight: 100;
+                    font-size: 16px;
+                    i {
+                        margin-right: 5px;
+                    }
+                    &:hover {
+                        color: #4188de;
+                    }
+                }
+            }
+        }
+    }
+    .search-section {
+        h1 {
+            font-size: 65px;
+            margin-bottom: 0;
+            margin-top: 60px;
+            color: #fff;
+            @media (max-width: 767px) {
+                font-size: 40px;
+            }
+            span {
+                font-weight: 100;
+            }
+        }
+        p {
+            color: #eee;
+            font-size: 22px;
+            font-weight: 100;
+            @media (max-width: 767px) {
+                font-size: 18px;
+            }
+        }
+        .search {
+            background-color: rgba(255,255,255,0.4);
+            padding-top: 15px;
+            margin-top: 120px;
+            .input-group {
+                .input-group-addon {
+                    border-radius: 0;
+                }
+            }
+            .form-control {
+                border-radius: 0;
+                padding: 24px 12px;
+            }
+            .btn {
+                border-radius: 0;
+                padding: 13px 5PX;
+                font-size: 16px;
+                font-weight: 300;
+                color: #fff;
+                background-color: #4188de;
+                &:hover {
+                    color: #4188de;
+                    background-color: #fff;
+                }
+            }
+        }
+    }
+}
+img {
+    max-width: 100%;
+}
