@@ -13,25 +13,25 @@ class Home extends CI_Controller {
 		
 		$this->data = array();
 		$this->script = array();
-
 	}
 
 	public function index() {
 
 		if ($this->user_model->is_logged_in()) {
-			if ($this->session->userdata('user_type') == '0') {
-				redirect('user/upgrade_membership');
-			} else {
-				redirect('home/dashboard');
-			}
+			$this->css = array('home_welcome');
+			$this->script = array('jquery.form', 'home_welcome');
+			// $this->template->load('application', 'home/welcome', $this->css, $this->script, $this->data);
+			echo 'You have been loggedin';
 		} else {
 			$this->css = array('home_welcome');
+			$this->script = array('jquery.form', 'home_welcome');
 			$this->template->load('application', 'home/welcome', $this->css, $this->script, $this->data);
 		}
 	}
 
 	public function welcome() {
 		$this->css = array('home_welcome');
+		$this->script = array('jquery.form', 'home_welcome');
 		$this->template->load('application', 'home/welcome', $this->css, $this->script, $this->data);
 	}
 	public function terms() {
@@ -47,21 +47,6 @@ class Home extends CI_Controller {
 		$this->template->load('main', 'home/_agreement', $this->css, $this->script, $this->data);
 	}
 
-
-	public function dashboard() {
-		if ($this->user_model->is_logged_in()) {
-			$this->css = array('home_dashboard');
-			$this->script = array('home_dashboard');
-			
-			$this->data['error'] = $this->session->flashdata('error');
-			$this->data['message'] = $this->session->flashdata('message');
-			$this->data['user'] = $this->user_model->get_current_user();
-
-			$this->template->load('application', 'home/dashboard', $this->css, $this->script, $this->data);
-		} else {
-			redirect('user/login');
-		}
-	}
 
 	public function do_upload() {
 		$config['upload_path']          = './uploads/';

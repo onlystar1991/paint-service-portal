@@ -16,21 +16,19 @@ class User_model extends CI_Model {
 	public function login($email, $password) {
 		$query = $this->db->where('email', $email)
 					->limit(1)
-					->get('tbl_users');
+					->get('users');
 
 		if ($query->num_rows() === 1) {
 			$user = $query->row();
-			if (md5($password) == $user->pass) {
+			if (md5($password) == $user->password) {
 				$session_data = array(
 					'user_name'			=> $user->first_name. " ".$user->last_name,
 					'email'				=> $user->email,
-					'user_id'			=> $user->id,
-					'user_type'			=> $user->user_type,
-					'bucket_id'			=> $user->bucket_id,
-					'customer_id'		=> $user->customer_id
+					'user_id'			=> $user->id
 				);
 
 				$this->session->set_userdata($session_data);
+				$this->session->set_flashdata('notice', 'Signin success.');
 				return true;
 			} else {
 				return false;
@@ -43,11 +41,11 @@ class User_model extends CI_Model {
 		return $this->session->userdata('email') ? true : false;
 	}
 
-	public function register($first_name, $last_name, $email, $password) {
-		$query = $this->db->select('email, id, pass')
+	public function register($first_name, $last_name, $email, $password, $phone_number, $address, $city) {
+		$query = $this->db->select('email, id, password')
 				->where('email', $email)
 				->limit(1)
-				->get('tbl_users');
+				->get('users');
 		if ($query->num_rows() === 1) {
 			return false;
 		} else {
@@ -55,10 +53,23 @@ class User_model extends CI_Model {
 				'first_name' => $first_name,
 				'last_name' => $last_name,
 				'email' => $email,
-				'pass' => md5($password),
-				'register' => date("Y-m-d H:i:s")
+				'password' => md5($password),
+				'phone_number' => $phone_number,
+				'address' => $address,
+				'city' => $city
 			);
-			return $this->db->insert('tbl_users', $data);
+			$flag = $this->db->insert('users', $data);
+			if ($flag) {
+				$id = $this->db->insert_id();
+				$session_data = array(
+					'user_name'			=> $data['first_name']. " ".$data['last_name'],
+					'email'				=> $data['email'],
+					'user_id'			=> $id
+				);
+				$this->session->set_userdata($session_data);
+				$this->session->set_flashdata('notice', 'SignUp success.');
+				return true;
+			}
 		}
 		return false;
 	}
@@ -66,7 +77,7 @@ class User_model extends CI_Model {
 	public function get_default_categories() {
 		$query = $this->db->select('default_categories')
 				->limit(1)
-				->get('tbl_users');
+				->get('users');
 		return $query->result_array();
 	}
 
@@ -101,7 +112,7 @@ class User_model extends CI_Model {
 
 	public function get_sharable_users() {
 		$query = $this->db->where('email !=', $this->session->userdata('email'))
-				->get('tbl_users')->result_array();
+				->get('users')->result_array();
 		return $query;
 	}
 
@@ -120,47 +131,47 @@ class User_model extends CI_Model {
 	}
 
 	public function get_current_user() {
-		return $this->db->get_where('tbl_users', array('email' => $this->session->userdata('email')))->result_array()[0];
+		return $this->db->get_where('users', array('email' => $this->session->userdata('email')))->result_array()[0];
 	}
 
 	public function delete_account($email) {
 		$this->db->where('email', $email);
-		$user = $this->db->get('tbl_users')->result_array()[0];
+		$user = $this->db->get('users')->result_array()[0];
 		$this->db->where('email', $email);
-		$this->db->delete('tbl_users');
+		$this->db->delete('users');
 	}
 
 	public function update_customer_id($customer_id, $user_type, $plan_id) {
 		$this->db->where('email', $this->session->userdata('email'));
-		$user = $this->db->get('tbl_users')->result_array()[0];
+		$user = $this->db->get('users')->result_array()[0];
 		
 		$this->db->where('email', $this->session->userdata('email'));
-		return $this->db->update('tbl_users', array('customer_id' => $customer_id, 'user_type' => $user_type, 'plan_id' => $plan_id));
+		return $this->db->update('users', array('customer_id' => $customer_id, 'user_type' => $user_type, 'plan_id' => $plan_id));
 	}
 
 	public function update_user_name($email, $first_name, $last_name) {
 		$this->db->where('email', $email);
-		return $this->db->update('tbl_users', array('first_name' => $first_name, 'last_name' => $last_name));
+		return $this->db->update('users', array('first_name' => $first_name, 'last_name' => $last_name));
 	}
 	
 	public function update_user_email($email, $new_email) {
 		$this->db->where('email', $email);
-		return $this->db->update('tbl_users', array('email' => $new_email));
+		return $this->db->update('users', array('email' => $new_email));
 	}
 
 	public function change_photo($file_name) {
 		$this->db->where('email', $this->session->userdata('email'));
 		if ($file_name == "") {
-			return $this->db->update('tbl_users', array("photo" => ""));
+			return $this->db->update('users', array("photo" => ""));
 		} else {
-			return $this->db->update('tbl_users', array("photo" => base_url() . 'uploads/' . $file_name));
+			return $this->db->update('users', array("photo" => base_url() . 'uploads/' . $file_name));
 		}
 	}
 
 	public function password_check($password) {
-		$query = $this->db->where(array('email' => $this->session->userdata('email'), 'pass' => md5($password)))
+		$query = $this->db->where(array('email' => $this->session->userdata('email'), 'password' => md5($password)))
 					->limit(1)
-					->get('tbl_users');
+					->get('users');
 
 		if ($query->num_rows() === 1) {
 			return false;
@@ -171,7 +182,7 @@ class User_model extends CI_Model {
 	public function email_check($email) {
 		$query = $this->db->where(array('email' => $email))
 					->limit(1)
-					->get('tbl_users');
+					->get('users');
 
 		if ($query->num_rows() === 1) {
 			return true;
@@ -182,18 +193,18 @@ class User_model extends CI_Model {
 
 	public function update_password($email, $new_password) {
 		$this->db->where('email', $email);
-		return $this->db->update('tbl_users', array('pass' => md5($new_password)));
+		return $this->db->update('users', array('password' => md5($new_password)));
 	}
 
 	public function set_password_reset_token($token, $email) {
 		$this->db->where('email', $email);
-		return $this->db->update('tbl_users', array('reset_password_token' => $token));
+		return $this->db->update('users', array('reset_password_token' => $token));
 	}
 
 	public function check_token($token) {
 		$query = $this->db->where(array('reset_password_token' => $token))
 					->limit(1)
-					->get('tbl_users');
+					->get('users');
 		if ($query->num_rows() === 1) {
 			$user = $query->row();
 			return $user->email;
@@ -203,13 +214,13 @@ class User_model extends CI_Model {
 	}
 	public function set_new_password($new_pass, $email) {
 		$this->db->where('email', $email);
-		return $this->db->update('tbl_users', array('pass' => md5($new_password)));
+		return $this->db->update('users', array('password' => md5($new_password)));
 	}
 
 	public function is_expired($email) {
 		$query = $this->db->where(array('email' => $email))
 						->limit(1)
-						->get('tbl_users');
+						->get('users');
 		if ($query->num_rows() === 1) {
 			$user = $query->row();
 
@@ -222,10 +233,10 @@ class User_model extends CI_Model {
 	}
 	public function make_unpaid_account_for_customer_id($customer_id) {
 		$this->db->where('customer_id', $customer_id);
-		$flag = $this->db->update('tbl_users', array('paid_status' => UNPAID));
+		$flag = $this->db->update('users', array('paid_status' => UNPAID));
 		$query = $this->db->where('customer_id', $customer_id)
 						->limit(1)
-						->get('tbl_users');
+						->get('users');
 
 		$result = array();
 		$result['status'] = $flag;
@@ -238,10 +249,10 @@ class User_model extends CI_Model {
 
 	public function make_paid_account_for_customer_id($customer_id) {
 		$this->db->where('customer_id', $customer_id);
-		$flag = $this->db->update('tbl_users', array('paid_status' => PAID));
+		$flag = $this->db->update('users', array('paid_status' => PAID));
 		$query = $this->db->where('customer_id', $customer_id)
 						->limit(1)
-						->get('tbl_users');
+						->get('users');
 
 		$result = array();
 		$result['status'] = $flag;
@@ -254,7 +265,7 @@ class User_model extends CI_Model {
 	public function delete_user_with_customer_id($customer_id) {
 		$query = $this->db->where('customer_id', $customer_id)
 						->limit(1)
-						->get('tbl_users');
+						->get('users');
 
 		$result = array();
 		if ($query->num_rows() === 1) {
@@ -263,7 +274,7 @@ class User_model extends CI_Model {
 		}
 
 		$this->db->where('customer_id', $customer_id);
-		$flag = $this->db->delete('tbl_users');
+		$flag = $this->db->delete('users');
 		$result['status'] = $flag;
 
 		return $result;

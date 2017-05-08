@@ -33,39 +33,24 @@ class User extends CI_Controller {
 		
 		$this->form_validation->set_rules('password', 'Password', 'required');
 		
-
+		$result = array();
 		if ($this->form_validation->run() == true) {
 
 			if ($this->user_model->login($this->input->post('email'), $this->input->post('password'))) {
-				$this->session->set_flashdata('message', "Successfully logged in.");
-				redirect('/', 'refresh');
+				$result['status'] = 'success';
+				$result['message'] = 'Login Success';
 			} else {
-				$this->session->set_flashdata('message', "Invalid Email/Password.");
-				redirect('user/login', 'refresh');
+				$result['status'] = 'error';
+				$result['message'] = 'Invalid Email/Password.';
 			}
-
 		} else {
 
-			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+			$this->data['message'] = (validation_errors()) ? validation_errors() : '';
 
-			$this->data['email'] = array(
-				'class' => 'form-control',
-				'placeholder' => 'Your email',
-				'name' => 'email',
-				'id' => 'email',
-				'type' => 'email',
-				'value' => $this->form_validation->set_value('email'),
-			);
-
-			$this->data['password'] = array(
-				'class' => 'form-control',
-				'placeholder' => 'Password',
-				'name' => 'password',
-				'id' => 'password',
-				'type' => 'password',
-			);
-			$this->template->load('main', 'user/login', $this->css, $this->script, $this->data);
+			$result['status'] = 'error';
+			$result['message'] = $this->data['message'];
 		}
+		echo json_encode($result);
 	}
 
 
@@ -73,86 +58,45 @@ class User extends CI_Controller {
 	{
 		$this->form_validation->set_rules('first_name', 'First Name', 'required');
 		$this->form_validation->set_rules('last_name', 'Last Name', 'required');
-		$this->form_validation->set_rules('agree', 'Agree Terms', 'required', array('required' => 'You should agree to Terms of Service'));
-		$this->form_validation->set_rules('email', 'Email', 'trim|required|is_unique[tbl_users.email]', 
+		// $this->form_validation->set_rules('agree', 'Agree Terms', 'required', array('required' => 'You should agree to Terms of Service'));
+		$this->form_validation->set_rules('email', 'Email', 'trim|required|is_unique[users.email]', 
 			array(
 				'is_unique' => 'This %s already exists.'
 			)
 		);
 
 		$this->form_validation->set_rules('password', 'Password', 'trim|min_length[8]|required');
-		$this->form_validation->set_rules('confirm_password', 'Confirm Password', 'trim|required|matches[password]');
-
+		$this->form_validation->set_rules('confirm_password', 'Confirm Password', 'trim|matches[password]');
+		$response = array();
 		if ($this->form_validation->run() == true) {
-			if ($this->user_model->register($this->input->post('first_name'), $this->input->post('first_name'), $this->input->post('email'), $this->input->post('password'))) {
+			if ($this->user_model->register($this->input->post('first_name'), $this->input->post('last_name'), $this->input->post('email'), $this->input->post('password'), $this->input->post('phone_number'), $this->input->post('address'), $this->input->post('city'))) {
+				// $message = $this->load->view('mails/registeration', array(), true);
 
+				// $headers = "MIME-Version: 1.0" . "\r\n";
+				// $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
-				$message = $this->load->view('mails/registeration', array(), true);
+				// // More headers
+				// $headers .= 'From: <administrator@videre.com>' . "\r\n";
+				// $subject = "Videre - Thanks for regsiteration";
 
-				$headers = "MIME-Version: 1.0" . "\r\n";
-				$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-
-				// More headers
-				$headers .= 'From: <administrator@videre.com>' . "\r\n";
-				$subject = "Videre - Thanks for regsiteration";
-
-				$to = $this->input->post('email');
-				$flag = mail($to,$subject,$message,$headers);
+				// $to = $this->input->post('email');
+				// $flag = mail($to,$subject,$message,$headers);
 				
-				redirect('user/login', 'refresh');
+				// redirect('user/login', 'refresh');
+
+				$response['status'] = 'success';
+				$response['message'] = 'register success';
 
 			} else {
-				$this->session->set_flashdata('message', "Email already taken.");
-				redirect('user/register', 'refresh');
+				$response['status'] = 'error';
+				$response['message'] = '<p>Email already taken.</p>';
 			}
 		} else {
-
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
-
-			$this->data['first_name'] = array(
-				'class' => 'form-control',
-				'placeholder' => 'First Name',
-				'name' => 'first_name',
-				'id' => 'first_name',
-				'type' => 'text',
-				'value' => $this->form_validation->set_value('first_name'),
-			);
-
-			$this->data['last_name'] = array(
-				'class' => 'form-control',
-				'placeholder' => 'Last Name',
-				'name' => 'last_name',
-				'id' => 'last_name',
-				'type' => 'text',
-				'value' => $this->form_validation->set_value('last_name'),
-			);
-
-			$this->data['email'] = array(
-				'class' => 'form-control',
-				'placeholder' => 'Your email',
-				'name' => 'email',
-				'id' => 'email',
-				'type' => 'email',
-				'value' => $this->form_validation->set_value('email'),
-			);
-
-			$this->data['password'] = array(
-				'class' => 'form-control',
-				'placeholder' => 'Password',
-				'name' => 'password',
-				'id' => 'password',
-				'type' => 'password',
-				'value' => $this->form_validation->set_value('password'),
-			);
-			$this->data['confirm_password'] = array(
-				'class' => 'form-control',
-				'placeholder' => 'Confirm Password',
-				'name' => 'confirm_password',
-				'id' => 'confirm_password',
-				'type' => 'password',
-			);
-			$this->template->load('main', 'user/register', $this->css, $this->script, $this->data);
+			$response['status'] = 'error';
+			$response['message'] = $this->data['message'];
 		}
+		echo json_encode($response);
 	}
 
 	public function upgrade_membership() {

@@ -9,7 +9,11 @@
 		<link rel="icon" type="image/png" href="<?= base_url() ?>assets/images/favicon.png" />
 		<title>Home | Zinbids</title>
 		<link href="<?= base_url() ?>assets/stylesheet/style.css" rel="stylesheet" type="text/css" />
-		<script type="<?= base_url() ?>assets/text/javascript" src="js/html5.js"></script>
+		<?= $style ?>
+		<script type="text/javascript" src="<?= base_url() ?>assets/js/html5.js"></script>
+		<script type="text/javascript">
+			var base_url = '<?= base_url() ?>';
+		</script>
 	</head>
 
 	<body>
@@ -20,5 +24,8 @@
 		<script type="text/javascript" src="<?= base_url() ?>assets/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="<?= base_url() ?>assets/js/slick.min.js"></script>
 		<script type="text/javascript" src="<?= base_url() ?>assets/js/custom.js"></script>
+		<?php
+			echo $script;
+		?>
 	</body>
 </html>

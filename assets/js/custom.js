@@ -8,8 +8,21 @@ $(document).on('ready', function() {
         slidesToShow: 1,
         slidesToScroll: 1,
     });
+    $('#show-map').click(function() {
+        $('#map-view').toggle();
+        $('#show-map span').toggleClass('hide');
+        return false;
+    })
 });
 
+
+
+function scroll_to_class(element_class, removed_height) {
+	var scroll_to = $(element_class).offset().top - removed_height;
+	if($(window).scrollTop() != scroll_to) {
+		$('html, body').stop().animate({scrollTop: scroll_to}, 0);
+	}
+}
 
 function bar_progress(progress_line_object, direction) {
 	var number_of_steps = progress_line_object.data('number-of-steps');
@@ -25,7 +38,13 @@ function bar_progress(progress_line_object, direction) {
 }
 
 jQuery(document).ready(function() {
+	
+    // Form
     $('.f1 fieldset:first').fadeIn('slow');
+    
+    $('.f1 input[type="text"], .f1 input[type="password"], .f1 textarea').on('focus', function() {
+    	$(this).removeClass('input-error');
+    });
     
     // next step
     $('.f1 .btn-next').on('click', function() {
@@ -35,12 +54,10 @@ jQuery(document).ready(function() {
     	var current_active_step = $(this).parents('.f1').find('.f1-step.active');
     	var progress_line = $(this).parents('.f1').find('.f1-progress-line');
     	
-    	// fields validation
-    	
     	if( next_step ) {
     		parent_fieldset.fadeOut(400, function() {
     			// change icons
-    			current_active_step.removeClass('active').addClass('activated').next().addClass('active');
+                current_active_step.removeClass('active').addClass('activated').next().addClass('active');
     			// progress bar
     			bar_progress(progress_line, 'right');
     			// show next step
@@ -58,7 +75,7 @@ jQuery(document).ready(function() {
     	
     	$(this).parents('fieldset').fadeOut(400, function() {
     		// change icons
-    		current_active_step.removeClass('active').prev().removeClass('activated').addClass('active');
+            current_active_step.removeClass('active').prev().removeClass('activated').addClass('active');
     		// progress bar
     		bar_progress(progress_line, 'left');
     		// show previous step
@@ -67,6 +84,5 @@ jQuery(document).ready(function() {
 			scroll_to_class( $('.f1'), 20 );
     	});
     });
-    
-    
 });
+

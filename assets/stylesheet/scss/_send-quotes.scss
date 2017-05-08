@@ -1,0 +1,99 @@
+.descripbe {
+    border: 1px solid #d9d9d9;
+    background-color: #fff;
+    margin-top: 20px;
+    .user-det {
+        img {
+            height: 120px;
+            width: 120px;
+            border-radius: 5px;
+            margin-right: 20px;
+        }
+        h3 {
+            padding-top: 35px;
+        }
+        p {
+            color: #989898;
+        }
+        ul {
+            width: 100%;
+            float: left;
+            margin: 30px 0 0;
+            li {
+                width: 33.33%;
+                float: left;
+                text-align: center;
+                color: #424242;
+                font-size: 16px;
+                i {
+                    margin-right: 8px;
+                    color: #1e88e5;
+                }
+                span {
+                    width: 100%;
+                    float: left;
+                    font-size: 12px;
+                    color: #989898;
+                }
+                &:nth-child(2) {
+                    border-left: 1px solid #d9d9d9;
+                    border-right: 1px solid #d9d9d9;
+                }
+            }
+        }
+    }
+}
+.send-quote {
+    border: 1px solid #d9d9d9;
+    background-color: #fff;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    h2 {
+        font-size: 20px;
+        font-weight: 300;
+        color: #424242;
+        margin-bottom: 30px;
+    }
+    .cost { 
+        .input {
+            font-size: 100px;
+            width: 100%;
+            border: 0;
+            background-color: transparent;
+            text-align: center;
+            &:focus {
+                outline: 0;
+            }
+        }
+        .type {
+            width: 100%;
+            float: left;
+        }
+    }
+    textarea {
+        height: 150px;
+        margin-bottom: 20px;
+    }
+}
+.desciption {
+    border: 1px solid #d9d9d9;
+    background-color: #fff;
+    .single {
+        border-bottom: 1px solid #ddd;
+        h2 {
+            font-size: 20px;
+            font-weight: 300;
+            color: #424242;
+        }
+        p {
+            color: #999;
+            line-height: 22px;
+            font-size: 14px;
+            font-weight: 300;
+        }
+        &:last-child {
+            border-bottom: 0;
+        }
+    }
+}

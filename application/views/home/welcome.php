@@ -1,10 +1,10 @@
 <header>
     <div class="top">
         <div class="container">
-            <a href="#" class="pull-left"><img src="<?= base_url() ?>assets/images/logo.png"></a>
+            <a href="<?= base_url()?>" class="pull-left"><img src="<?= base_url() ?>assets/images/logo.png"></a>
             <ul class="list-inline pull-right">
-                <li><a href="javascript:void(0)" data-toggle="modal" data-target="#signup"><i class="fa fa-user-plus"></i>Signup</a></li>
-                <li><a href="javascript:void(0)" data-toggle="modal" data-target="#login"><i class="fa fa-sign-in"></i>Login</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#signup"><i class="fa fa-user-plus"></i>Signup</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#login"><i class="fa fa-sign-in"></i>Login</a></li>
             </ul>
         </div>
     </div>
@@ -266,16 +266,17 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="form-wrap">
-                            <form>
+                            <form id="login-form" action='<?= base_url() ?>user/login' method='post'>
+                                <div id="login-errors" class="alert alert-danger"> Test </div>
                                 <div class="form-group">
-                                    <input type="email" class="form-control" placeholder="Enter Email">
+                                    <input name='email' type="email" class="form-control" placeholder="Enter Email">
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" class="form-control" placeholder="Password">
+                                    <input name='password' type="password" class="form-control" placeholder="Password">
                                 </div>
-                                <input type="submit" class="btn btn-primary btn-block btn-lg" value="Log in">
+                                <a id="btn-login" href="javascript:void(0)" class="btn btn-primary btn-block btn-lg" > Log in </a>
                             </form>
-                            <p class="text-center">Don't Have Account? <a href="">Signup Now</a></p>
+                            <p class="text-center">Don't Have Account? <a  href="#" data-toggle="modal" data-target="#signup" data-dismiss="modal">Signup Now</a></p>
                         </div>
                     </div>
                 </div>
@@ -306,54 +307,55 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="form-wrap">
-                            <form>
+                            <form id="signup-form" action='<?= base_url() ?>user/register' method='post'>
+                                <div id="signup-errors" class="alert alert-danger"> Test </div>
                                 <div class="row">
                                     <div class="col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="First Name">
+                                            <input name="first_name" type="text" class="form-control" placeholder="First Name">
                                         </div>
                                     </div>
                                     <div class="col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="Last Name">
+                                            <input name="last_name" type="text" class="form-control" placeholder="Last Name">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <input type="email" class="form-control" placeholder="Email">
+                                            <input name="email" type="email" class="form-control" placeholder="Email">
                                         </div>
                                     </div>
                                     <div class="col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="Phone Number">
+                                            <input name="phone_number" type="text" class="form-control" placeholder="Phone Number">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <input type="password" class="form-control" placeholder="Password">
+                                            <input name="password" type="password" class="form-control" placeholder="Password">
                                         </div>
                                     </div>
                                     <div class="col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <input type="password" class="form-control" placeholder="Confirm Password">
+                                            <input name="confirm_password" type="password" class="form-control" placeholder="Confirm Password">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="Address">
+                                            <input name="address" type="text" class="form-control" placeholder="Address">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6 col-xs-12">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="City">
+                                            <input name="city" type="text" class="form-control" placeholder="City">
                                         </div>
                                     </div>
                                     <div class="col-sm-6 col-xs-12">
@@ -364,9 +366,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <input type="submit" class="btn btn-primary btn-block btn-lg" value="Sign Up">
+                                <a id="signup-button" class="btn btn-primary btn-block btn-lg"> Sign Up </a>
                             </form>
-                            <p class="text-center">Already Have Account? <a href="">Login Here</a></p>
+                            <p class="text-center">Already Have Account? <a href="#" data-toggle="modal" data-target="#login" data-dismiss="modal">Login Here</a></p>
                         </div>
                     </div>
                 </div>
